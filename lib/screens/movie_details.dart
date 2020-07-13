@@ -6,7 +6,7 @@ import 'package:like_button/like_button.dart';
 import 'package:yipy_yts/constants.dart';
 import 'package:yipy_yts/services/movie_data.dart';
 import 'package:yipy_yts/services/networking.dart';
-import 'package:yipy_yts/services/torrent_download_button.dart';
+import 'file:///E:/Code/Flutter/yipy_yts/lib/utilities/torrent_download_button.dart';
 import 'package:yipy_yts/utilities/genre_card.dart';
 
 class MovieDetails extends StatefulWidget {
@@ -42,7 +42,7 @@ class _MovieDetailsState extends State<MovieDetails> {
     });
   }
 
-  double itemCount;
+  var itemCount;
   String id;
   NetworkHelper _helper = NetworkHelper();
   String movieLength;
@@ -62,35 +62,30 @@ class _MovieDetailsState extends State<MovieDetails> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Stack(
+                    alignment: Alignment.bottomRight,
                     overflow: Overflow.visible,
                     children: <Widget>[
                       Container(
                         width: double.infinity,
-                        height: height * 0.3,
+                        height: height * 0.35,
                         decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.black45,
-                                offset: Offset(4, 4),
-                                spreadRadius: 15,
-                                blurRadius: 10)
-                          ],
-                          borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(100)),
-                          color: Colors.blue,
                           image: DecorationImage(
                             fit: BoxFit.cover,
                             image: NetworkImage(widget.movieData.imageLink),
                           ),
                         ),
                       ),
-                      IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: Icon(
-                          FontAwesomeIcons.chevronLeft,
-                          color: Colors.white,
+                      Positioned(
+                        top: 0,
+                        left: 0,
+                        child: IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: Icon(
+                            FontAwesomeIcons.chevronLeft,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                       Positioned(
@@ -101,14 +96,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                               EdgeInsets.symmetric(horizontal: 0, vertical: 15),
                           width: width * 0.9,
                           decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.black45,
-                                    offset: Offset(0, 4),
-                                    spreadRadius: 5,
-                                    blurRadius: 10)
-                              ],
-                              color: Colors.black,
+                              color: primaryColor,
                               borderRadius: BorderRadius.only(
                                 bottomLeft: Radius.circular(50),
                                 topLeft: Radius.circular(50),
@@ -118,36 +106,51 @@ class _MovieDetailsState extends State<MovieDetails> {
                             children: <Widget>[
                               Text(
                                 "⭐  " + widget.movieData.rating,
-                                style:
-                                    size12Medium.copyWith(color: Colors.white),
+                                style: size14Medium,
                               ),
                               Text(
                                 widget.movieData.year,
-                                style:
-                                    size12Medium.copyWith(color: Colors.white),
+                                style: size14Medium,
                               ),
                               Text(
                                 movieLength,
-                                style:
-                                    size12Medium.copyWith(color: Colors.white),
+                                style: size14Medium,
                               ),
                               LikeButton(),
                             ],
                           ),
                         ),
                       ),
+                      Container(
+                        margin: EdgeInsets.only(bottom: 10),
+                        height: 80,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: widget.movieData.torrents.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return TorrentDownloadButton(
+                              size: widget.movieData.torrents[index]['size'],
+                              quality: widget.movieData.torrents[index]
+                                  ['quality'],
+                              type: widget.movieData.torrents[index]['type'],
+                              downloadLink: widget.movieData.torrents[index]
+                                  ['url'],
+                            );
+                          },
+                        ),
+                      ),
                     ],
                   ),
                   SizedBox(height: 50),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
                           widget.movieData.title,
-                          style: size24Bold.copyWith(
-                              color: Colors.white, fontSize: 28),
+                          style: size20Bold,
                         ),
                         Container(
                           margin: EdgeInsets.only(top: 10),
@@ -206,20 +209,21 @@ class _MovieDetailsState extends State<MovieDetails> {
                         SizedBox(height: 30),
                         Text(
                           "Plot Summary",
-                          style: size16Light.copyWith(
-                              color: Colors.white, fontWeight: FontWeight.w500),
+                          style:
+                              size16Medium.copyWith(color: Color(0xd9ffffff)),
                         ),
                         SizedBox(height: 20),
                         Text(
                           widget.movieData.summary,
-                          style: size12Light.copyWith(
-                              color: Colors.white70, fontSize: 12),
+                          style: size14Medium.copyWith(
+                              fontWeight: FontWeight.w300,
+                              color: Colors.white54),
                         ),
                         SizedBox(height: 30),
                         Text(
                           "Cast and Crew",
-                          style: size16Light.copyWith(
-                              color: Colors.white, fontWeight: FontWeight.w500),
+                          style:
+                              size16Medium.copyWith(color: Color(0xd9ffffff)),
                         ),
                         SizedBox(height: 20),
                         Container(
@@ -251,8 +255,8 @@ class _MovieDetailsState extends State<MovieDetails> {
                                     SizedBox(height: 10),
                                     AutoSizeText(
                                       widget.movieData.cast[index]['name'],
-                                      style: size12Light.copyWith(
-                                          color: Colors.white),
+                                      style: size10Light.copyWith(
+                                          color: Colors.white54),
                                       minFontSize: 8,
                                       maxLines: 5,
                                     ),
@@ -260,8 +264,8 @@ class _MovieDetailsState extends State<MovieDetails> {
                                     Text(
                                       widget.movieData.cast[index]
                                           ['character_name'],
-                                      style: size12Light.copyWith(
-                                          color: Colors.white, fontSize: 10),
+                                      style: size8Medium.copyWith(
+                                          color: Colors.white38),
                                     ),
                                   ],
                                 ),
@@ -271,24 +275,6 @@ class _MovieDetailsState extends State<MovieDetails> {
                         ),
                         SizedBox(
                           height: 20,
-                        ),
-                        Container(
-                          height: 100,
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            itemCount: widget.movieData.torrents.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return TorrentDownloadButton(
-                                size: widget.movieData.torrents[index]['size'],
-                                quality: widget.movieData.torrents[index]
-                                    ['quality'],
-                                type: widget.movieData.torrents[index]['type'],
-                                downloadLink: widget.movieData.torrents[index]
-                                    ['url'],
-                              );
-                            },
-                          ),
                         ),
                       ],
                     ),

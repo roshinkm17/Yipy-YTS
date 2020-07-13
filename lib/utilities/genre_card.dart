@@ -13,11 +13,11 @@ class GenreCard extends StatelessWidget {
       child: Center(
         child: RaisedButton(
           padding: EdgeInsets.all(0),
-          color: Colors.white,
+          color: primaryColor,
           onPressed: () {},
           child: Text(
             genre,
-            style: size12Medium.copyWith(fontSize: fontSize),
+            style: size10Light.copyWith(fontWeight: FontWeight.bold),
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(50),

@@ -42,7 +42,7 @@ class _NavigationBarState extends State<NavigationBar> {
           showUnselectedLabels: false,
           type: BottomNavigationBarType.fixed,
           backgroundColor: bottomAppBarColor,
-          selectedItemColor: selectedIconColor,
+          selectedItemColor: primaryLightColor,
           unselectedItemColor: unselectedIconColor,
           currentIndex: _selectedPage,
           onTap: (index) {
