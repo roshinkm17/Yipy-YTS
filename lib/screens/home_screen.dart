@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:yipy_yts/services/movie_data.dart';
 import 'package:yipy_yts/services/networking.dart';
-import 'package:yipy_yts/utilities/builder.dart';
+import 'file:///E:/Code/Flutter/yipy_yts/lib/services/builder.dart';
 import 'package:yipy_yts/utilities/movie_card.dart';
 import 'package:yipy_yts/utilities/search_bar.dart';
 
@@ -23,6 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
     getRecommendedMovieData();
     getActionMovieData();
     getAnimationMovieData();
+
     getSciFiMovieData();
     getAdventureMovieData();
     getComedyMovieData();
@@ -33,8 +35,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   getRecommendedMovieData() async {
+    setState(() {
+      _isSaving = true;
+    });
     var recommendedMovieLink = apiLink + "?minimum_rating=8&sort=year";
     var data = await _helper.getData(recommendedMovieLink);
+    setState(() {
+      _isSaving = false;
+    });
     var number = data['data']['limit'];
     for (int i = 0; i < number; i++) {
       MovieData _movieData = MovieData();
@@ -302,136 +310,144 @@ class _HomeScreenState extends State<HomeScreen> {
   var crimeMovieArray = [];
   var thrillerMovieArray = [];
   NetworkHelper _helper = NetworkHelper();
+  bool _isSaving = false;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      body: SafeArea(
-        child: Container(
-          padding: EdgeInsets.all(12),
-          child: ListView(
-            children: <Widget>[
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      CircleAvatar(
-                        child: Icon(
-                          FontAwesomeIcons.userAlt,
-                          size: 16,
-                          color: Colors.white,
+    return ModalProgressHUD(
+      inAsyncCall: _isSaving,
+      progressIndicator: CircularProgressIndicator(),
+      child: Scaffold(
+        backgroundColor: backgroundColor,
+        body: SafeArea(
+          child: Container(
+            padding: EdgeInsets.all(12),
+            child: ListView(
+              children: <Widget>[
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.only(right: 20),
+                          child: CircleAvatar(
+                            child: Icon(
+                              FontAwesomeIcons.userAlt,
+                              size: 16,
+                              color: Colors.white,
+                            ),
+                            backgroundColor: Colors.white54,
+                            radius: 20,
+                          ),
                         ),
-                        backgroundColor: Colors.white54,
-                        radius: 20,
-                      ),
-                      SearchBar(),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                  Text(
-                    "Recommended",
-                    style: size16Medium,
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 20, bottom: 30),
-                    height: 230,
-                    child: CustomBuilder(array: recommendedMovieArray),
-                  ),
-                  Text(
-                    "Latest",
-                    style: size16Medium,
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 20, bottom: 30),
-                    height: 230,
-                    child: CustomBuilder(array: latestMovieArray),
-                  ),
-                  Text(
-                    "Action",
-                    style: size16Medium,
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 20, bottom: 30),
-                    height: 230,
-                    child: CustomBuilder(array: actionMovieArray),
-                  ),
-                  Text(
-                    "Animation",
-                    style: size16Medium,
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 20, bottom: 30),
-                    height: 230,
-                    child: CustomBuilder(array: animationMovieArray),
-                  ),
-                  Text(
-                    "Sci-Fi",
-                    style: size16Medium,
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 20, bottom: 30),
-                    height: 230,
-                    child: CustomBuilder(array: sciFiMovieArray),
-                  ),
-                  Text(
-                    "Adventure",
-                    style: size16Medium,
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 20, bottom: 30),
-                    height: 230,
-                    child: CustomBuilder(array: adventureMovieArray),
-                  ),
-                  Text(
-                    "Comedy",
-                    style: size16Medium,
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 20, bottom: 30),
-                    height: 230,
-                    child: CustomBuilder(array: comedyMovieArray),
-                  ),
-                  Text(
-                    "Horror",
-                    style: size16Medium,
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 20, bottom: 30),
-                    height: 230,
-                    child: CustomBuilder(array: horrorMovieArray),
-                  ),
-                  Text(
-                    "Romance",
-                    style: size16Medium,
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 20, bottom: 30),
-                    height: 230,
-                    child: CustomBuilder(array: romanceMovieArray),
-                  ),
-                  Text(
-                    "Crime",
-                    style: size16Medium,
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 20, bottom: 30),
-                    height: 230,
-                    child: CustomBuilder(array: crimeMovieArray),
-                  ),
-                  Text(
-                    "Thriller",
-                    style: size16Medium,
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 20, bottom: 30),
-                    height: 230,
-                    child: CustomBuilder(array: thrillerMovieArray),
-                  ),
-                ],
-              ),
-            ],
+                        Expanded(child: SearchBar()),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      "Recommended",
+                      style: size16Medium,
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 20, bottom: 30),
+                      height: 230,
+                      child: CustomBuilder(array: recommendedMovieArray),
+                    ),
+                    Text(
+                      "Latest",
+                      style: size16Medium,
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 20, bottom: 30),
+                      height: 230,
+                      child: CustomBuilder(array: latestMovieArray),
+                    ),
+                    Text(
+                      "Action",
+                      style: size16Medium,
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 20, bottom: 30),
+                      height: 230,
+                      child: CustomBuilder(array: actionMovieArray),
+                    ),
+                    Text(
+                      "Animation",
+                      style: size16Medium,
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 20, bottom: 30),
+                      height: 230,
+                      child: CustomBuilder(array: animationMovieArray),
+                    ),
+                    Text(
+                      "Sci-Fi",
+                      style: size16Medium,
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 20, bottom: 30),
+                      height: 230,
+                      child: CustomBuilder(array: sciFiMovieArray),
+                    ),
+                    Text(
+                      "Adventure",
+                      style: size16Medium,
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 20, bottom: 30),
+                      height: 230,
+                      child: CustomBuilder(array: adventureMovieArray),
+                    ),
+                    Text(
+                      "Comedy",
+                      style: size16Medium,
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 20, bottom: 30),
+                      height: 230,
+                      child: CustomBuilder(array: comedyMovieArray),
+                    ),
+                    Text(
+                      "Horror",
+                      style: size16Medium,
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 20, bottom: 30),
+                      height: 230,
+                      child: CustomBuilder(array: horrorMovieArray),
+                    ),
+                    Text(
+                      "Romance",
+                      style: size16Medium,
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 20, bottom: 30),
+                      height: 230,
+                      child: CustomBuilder(array: romanceMovieArray),
+                    ),
+                    Text(
+                      "Crime",
+                      style: size16Medium,
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 20, bottom: 30),
+                      height: 230,
+                      child: CustomBuilder(array: crimeMovieArray),
+                    ),
+                    Text(
+                      "Thriller",
+                      style: size16Medium,
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 20, bottom: 30),
+                      height: 230,
+                      child: CustomBuilder(array: thrillerMovieArray),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
