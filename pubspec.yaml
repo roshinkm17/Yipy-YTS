@@ -14,6 +14,8 @@ dependencies:
   like_button: ^1.0.1
   modal_progress_hud: ^0.1.3
   http: ^0.12.1
+  dio: any
+  path_provider: any
   auto_size_text: ^2.1.0
 
 dev_dependencies:

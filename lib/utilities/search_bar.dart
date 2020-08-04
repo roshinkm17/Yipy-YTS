@@ -10,10 +10,7 @@ class SearchBar extends StatelessWidget {
       child: TextField(
         onSubmitted: (value) {
           var searchLink = apiLink + "?query_term=$value";
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => SearchResults(searchLink)));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => SearchResults(searchLink)));
         },
         style: TextStyle(color: Colors.white54),
         decoration: InputDecoration(
@@ -24,7 +21,7 @@ class SearchBar extends StatelessWidget {
           ),
           suffixIcon: Icon(
             FontAwesomeIcons.search,
-            color: Color(0x33ffffff),
+            color: primaryLightColor,
             size: 14,
           ),
           filled: true,

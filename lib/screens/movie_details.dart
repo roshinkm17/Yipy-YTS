@@ -25,8 +25,7 @@ class _MovieDetailsState extends State<MovieDetails> {
     final int hour = widget.movieData.runtime ~/ 60;
     final int minutes = widget.movieData.runtime % 60;
     setState(() {
-      movieLength =
-          '${hour.toString().padLeft(2, "0")}h${minutes.toString().padLeft(2, "0")}m';
+      movieLength = '${hour.toString().padLeft(2, "0")}h${minutes.toString().padLeft(2, "0")}m';
     });
   }
 
@@ -36,9 +35,7 @@ class _MovieDetailsState extends State<MovieDetails> {
     var result = await _helper.getData(castUrl);
     setState(() {
       widget.movieData.cast = result['data']['movie']['cast'];
-      widget.movieData.cast == null
-          ? itemCount = 0
-          : itemCount = widget.movieData.cast.length.toDouble();
+      widget.movieData.cast == null ? itemCount = 0 : itemCount = widget.movieData.cast.length.toDouble();
     });
   }
 
@@ -92,8 +89,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                         bottom: -20,
                         right: 0,
                         child: Container(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 0, vertical: 15),
+                          padding: EdgeInsets.symmetric(horizontal: 0, vertical: 15),
                           width: width * 0.9,
                           decoration: BoxDecoration(
                               color: primaryColor,
@@ -131,11 +127,10 @@ class _MovieDetailsState extends State<MovieDetails> {
                           itemBuilder: (BuildContext context, int index) {
                             return TorrentDownloadButton(
                               size: widget.movieData.torrents[index]['size'],
-                              quality: widget.movieData.torrents[index]
-                                  ['quality'],
+                              quality: widget.movieData.torrents[index]['quality'],
                               type: widget.movieData.torrents[index]['type'],
-                              downloadLink: widget.movieData.torrents[index]
-                                  ['url'],
+                              downloadLink: widget.movieData.torrents[index]['url'],
+                              title: widget.movieData.title,
                             );
                           },
                         ),
@@ -178,11 +173,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                             child: DropdownButton(
                                 hint: Text("Suggested Clubs"),
                                 dropdownColor: Colors.black,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w300,
-                                    fontFamily: "Poppins"),
+                                style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w300, fontFamily: "Poppins"),
                                 items: [
                                   DropdownMenuItem(
                                     child: Text(
@@ -209,21 +200,17 @@ class _MovieDetailsState extends State<MovieDetails> {
                         SizedBox(height: 30),
                         Text(
                           "Plot Summary",
-                          style:
-                              size16Medium.copyWith(color: Color(0xd9ffffff)),
+                          style: size16Medium.copyWith(color: Color(0xd9ffffff)),
                         ),
                         SizedBox(height: 20),
                         Text(
                           widget.movieData.summary,
-                          style: size14Medium.copyWith(
-                              fontWeight: FontWeight.w300,
-                              color: Colors.white54),
+                          style: size14Medium.copyWith(fontWeight: FontWeight.w300, color: Colors.white54),
                         ),
                         SizedBox(height: 30),
                         Text(
                           "Cast and Crew",
-                          style:
-                              size16Medium.copyWith(color: Color(0xd9ffffff)),
+                          style: size16Medium.copyWith(color: Color(0xd9ffffff)),
                         ),
                         SizedBox(height: 20),
                         Container(
@@ -231,9 +218,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                           child: ListView.builder(
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
-                            itemCount: itemCount == null
-                                ? itemCount = 0
-                                : itemCount.toInt(),
+                            itemCount: itemCount == null ? itemCount = 0 : itemCount.toInt(),
                             itemBuilder: (BuildContext context, int index) {
                               return Container(
                                 margin: EdgeInsets.symmetric(horizontal: 10),
@@ -241,31 +226,24 @@ class _MovieDetailsState extends State<MovieDetails> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
                                     CircleAvatar(
-                                      backgroundImage: NetworkImage(widget
-                                                      .movieData.cast[index]
-                                                  ['url_small_image'] ==
-                                              null
+                                      backgroundImage: NetworkImage(widget.movieData.cast[index]['url_small_image'] == null
                                           ? "https://img.icons8"
                                               ".com/fluent/48/000000/person-female"
                                               ".png"
-                                          : widget.movieData.cast[index]
-                                              ['url_small_image']),
+                                          : widget.movieData.cast[index]['url_small_image']),
                                       radius: 20,
                                     ),
                                     SizedBox(height: 10),
                                     AutoSizeText(
                                       widget.movieData.cast[index]['name'],
-                                      style: size10Light.copyWith(
-                                          color: Colors.white54),
+                                      style: size10Light.copyWith(color: Colors.white54),
                                       minFontSize: 8,
                                       maxLines: 5,
                                     ),
                                     SizedBox(height: 0),
                                     Text(
-                                      widget.movieData.cast[index]
-                                          ['character_name'],
-                                      style: size8Medium.copyWith(
-                                          color: Colors.white38),
+                                      widget.movieData.cast[index]['character_name'],
+                                      style: size8Medium.copyWith(color: Colors.white38),
                                     ),
                                   ],
                                 ),
